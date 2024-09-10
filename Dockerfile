@@ -1,5 +1,12 @@
-FROM rapidsai/rapidsai-core:cuda11.8-runtime-ubuntu20.04-py3.9
-COPY * /ai/
-WORKDIR /ai/
+FROM  nvcr.io/nvidia/rapidsai/notebooks:24.08-cuda12.5-py3.10
 
-RUN source activate rapids && conda install -c conda-forge ome-types pyvips tifffile
+USER root
+RUN apt-get -y update
+RUN apt-get -y install git openjdk-17-jdk build-essential
+USER rapids
+
+ENV JAVA_HOME /usr/lib/jvm/java-1.17.0-openjdk-amd64/
+
+RUN pip install ome-types pyvips tifffile python-bioformats
+RUN pip install git+https://github.com/vdsukhov/image_processing_py.git
+
